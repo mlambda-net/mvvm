@@ -1,0 +1,34 @@
+{
+  "name": "mvvm",
+  "version-string": "0.0.1",
+  "license": "MIT",
+  "dependencies": [
+    "opengl",
+    "boost-format",
+    {
+      "name": "imgui",
+      "default-features": false,
+      "features": [
+        "opengl3-binding",
+        "docking-experimental",
+        "wchar32"
+      ]
+    },
+    {
+      "name": "gtest"
+    },
+    {
+      "name": "freetype",
+      "default-features": false,
+      "features": [
+        "png",
+        "zlib",
+        "bzip2"
+      ]
+    },
+    {
+      "name": "sdl2",
+      "platform": "!emscripten"
+    }
+  ]
+}

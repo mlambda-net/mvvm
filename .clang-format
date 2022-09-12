@@ -1,0 +1,17 @@
+---
+BasedOnStyle: Google
+IndentWidth: 3
+Language: Cpp
+NamespaceIndentation: All
+SortIncludes: CaseInsensitive
+UseTab: Never
+KeepEmptyLinesAtTheStartOfBlocks: false
+MaxEmptyLinesToKeep: 1
+SortUsingDeclarations: true
+Standard: c++20
+PointerAlignment: Left
+BreakStringLiterals: false
+AllowShortLambdasOnASingleLine: None
+ColumnLimit: 0
+SeparateDefinitionBlocks: Always
+...

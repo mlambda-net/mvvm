@@ -1,0 +1,5 @@
+Checks: '-*,clang-analyzer-*,-clang-analyzer-cplusplus*,llvm-*'
+FormatStyle: file
+CheckOptions:
+  - key: readability-implicit-bool-conversion.AllowIntegerConditions
+    value: '1'

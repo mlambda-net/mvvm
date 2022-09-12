@@ -1,0 +1,21 @@
+addons:
+  sonarcloud:
+    organization: "mlambda-net"
+    token:
+      secure: $SONAR_TOKEN
+
+script:
+  - mkdir ~/tools
+  - pushd ~/tools
+  - git clone https://github.com/Microsoft/vcpkg.git
+  - pushd vcpkg
+  - ./bootstrap-vcpkg.sh
+  - ./vcpkg integrate install
+  - popd
+  - popd
+  # Wraps the compilation with the Build Wrapper to generate configuration (used
+  # later by the SonarScanner) into the "bw-output" folder
+  - build-wrapper-linux-x86-64 --out-dir bw-output make desktop
+  # And finally run the SonarCloud analysis - read the "sonar-project.properties"
+  # file to see the specific configuration
+  - sonar-scanner -Dsonar.cfamily.build-wrapper-output=bw-output
