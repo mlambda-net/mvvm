@@ -4,15 +4,34 @@
   "license": "MIT",
   "dependencies": [
     "opengl",
+    "matchit",
     "boost-format",
+    "boost-log",
+    {
+      "name": "glfw3",
+      "platform": "!emscripten"
+    },
     {
       "name": "imgui",
       "default-features": false,
       "features": [
-        "opengl3-binding",
         "docking-experimental",
-        "wchar32"
-      ]
+        "wchar32",
+        "opengl3-binding",
+        "glfw-binding"
+      ],
+      "platform": "!emscripten"
+    },
+    {
+      "name": "imgui",
+      "default-features": false,
+      "features": [
+        "docking-experimental",
+        "wchar32",
+        "opengl3-binding",
+        "glfw-binding"
+      ],
+      "platform": "emscripten"
     },
     {
       "name": "gtest"
@@ -25,10 +44,6 @@
         "zlib",
         "bzip2"
       ]
-    },
-    {
-      "name": "sdl2",
-      "platform": "!emscripten"
     }
   ]
 }

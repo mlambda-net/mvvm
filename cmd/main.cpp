@@ -1,21 +1,19 @@
-#include <app/myapp.h>
 
 #include <iostream>
 
+#include "myapp.h"
+
 int main() {
    try {
-
-
-
-      auto app = new MyApp("My App");
+      std::unique_ptr<MyApp> app = std::make_unique<MyApp>("My App");
       app->ConfigureDesktop();
       app->Start();
       auto done = false;
       while (!done) {
          done = app->Run();
       }
-   } catch (std::exception e) {
-      std::cout << e.what() << std::endl;
+   } catch (std::exception *e) {
+      std::cout << e->what() << std::endl;
    }
    return 0;
 }
