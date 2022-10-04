@@ -1,23 +1,35 @@
 project(web)
 
-set(MY_EXECUTABLE_SOURCES
-        main.cpp
-        )
+add_compile_options(${BUILD_FLAGS})
+add_link_options(${LINK_FLAGS})
 
-add_executable(web ${MY_EXECUTABLE_SOURCES})
+add_executable(${PROJECT_NAME} main.cpp)
 
-target_include_directories(web PUBLIC ../ui/include)
-target_include_directories(web PUBLIC ../app/include)
+target_include_directories(${PROJECT_NAME} PUBLIC ${INCLUDE_DIR})
+target_include_directories(${PROJECT_NAME} PUBLIC ../app)
 
-
-SET(LINK_FLAGS "-g0 -s USE_SDL=2 -s FULL_ES2=1 -s WASM=1 -s ASSERTIONS=0 -s ALLOW_MEMORY_GROWTH=1 -s NO_EXIT_RUNTIME=0 -s USE_PTHREADS=0 -s
-ASYNCIFY -s MAX_WEBGL_VERSION=2 -lembind  --shell-file=${PROJECT_SOURCE_DIR}/shell_minimal.html --preload-file=${PROJECT_BINARY_DIR}/fonts@/fonts")
 
 set(CMAKE_EXECUTABLE_SUFFIX ".html")
+set(FLAGS "-g0")
+set(FLAGS "${FLAGS} -sUSE_SDL=2")
+set(FLAGS "${FLAGS} -sFULL_ES2=1")
+set(FLAGS "${FLAGS} -sWASM=1")
+set(FLAGS "${FLAGS} -sASSERTIONS=0")
+set(FLAGS "${FLAGS} -sALLOW_MEMORY_GROWTH=1")
+set(FLAGS "${FLAGS} -sNO_EXIT_RUNTIME=0")
+set(FLAGS "${FLAGS} -sUSE_PTHREADS=0")
+set(FLAGS "${FLAGS} -sASYNCIFY")
+set(FLAGS "${FLAGS} -sMAX_WEBGL_VERSION=2")
+set(FLAGS "${FLAGS} -lembind")
+set(FLAGS "${FLAGS} --shell-file=${PROJECT_SOURCE_DIR}/shell_minimal.html")
+set(FLAGS "${FLAGS} --preload-file=${PROJECT_BINARY_DIR}/fonts@/fonts")
 
-set_target_properties(web PROPERTIES LINK_FLAGS ${LINK_FLAGS})
+copy_assets(${PROJECT_NAME})
 
-target_link_libraries(web PRIVATE ui)
-target_link_libraries(web PRIVATE app)
+set_target_properties(${PROJECT_NAME} PROPERTIES LINK_FLAGS "${FLAGS}")
+
+target_link_libraries(${PROJECT_NAME} PRIVATE core)
+target_link_libraries(${PROJECT_NAME} PRIVATE app)
+
 
 
