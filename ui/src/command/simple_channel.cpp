@@ -3,8 +3,12 @@
 //
 
 #include "simple_channel.h"
-#include "middleware/lambda.h"
+
 #include <utility>
+
+#include "middleware/empty.h"
+#include "middleware/functor.h"
+#include "middleware/lambda.h"
 
 namespace ui {
 
@@ -13,43 +17,46 @@ namespace ui {
    SimpleChannel::SimpleChannel(const std::string &name) : name(name) {
    }
 
-   bool ui::SimpleChannel::IsValidMessage(std::unique_ptr<Message> message) { return true; }
+   bool ui::SimpleChannel::IsValidMessage(std::shared_ptr<Message> message) { return true; }
 
    void SimpleChannel::AddMiddleware(std::unique_ptr<Middleware> middleware) {
-      auto *item = static_cast<CommandMiddleware *>(middleware.get());
-
-      if (item == nullptr) {
-         throw std::invalid_argument("The type should be default middleware");
-      }
-
-      this->middlewares.push_back(std::unique_ptr<CommandMiddleware>(std::move(item)));
+      std::shared_ptr<Middleware> item = std::move(middleware);
+      this->middlewares.push_back(std::shared_ptr<Middleware>(item));
    }
 
    std::string SimpleChannel::GetID() { return this->name; }
 
    MiddlewareAction SimpleChannel::Execute(const Subscription &subscription) {
+      if (this->middlewares.empty()) {
+         return [subscription](std::shared_ptr<Message> message) {
+            subscription(message);
+         };
+      }
+
       auto actual = CreateMiddleware(this->middlewares.begin(), this->middlewares.end(), subscription);
-      return [&actual](std::unique_ptr<Message> message) {
-         actual->Invoke(std::move(message));
+
+      return [actual](std::shared_ptr<Message> message) {
+         actual->Invoke(message);
       };
    }
 
-   std::shared_ptr<CommandMiddleware> SimpleChannel::CreateMiddleware(std::list<std::shared_ptr<CommandMiddleware>>::iterator first, std::list<std::shared_ptr<CommandMiddleware>>::iterator last, const Subscription &subscription) {
+   std::shared_ptr<Middleware> SimpleChannel::CreateMiddleware(
+       std::list<std::shared_ptr<Middleware>>::iterator first,
+       std::list<std::shared_ptr<Middleware>>::iterator last,
+       const Subscription &subscription) {
       if (first == last) {
-         auto actual = *first;
-
-         auto lambda = std::make_shared<LambdaMiddleware>([actual](std::unique_ptr<Message> message) {
-            actual->Invoke(std::move(message));
-         });
-
-         actual->Next(lambda);
-         return actual;
+         return std::make_shared<LambdaMiddleware>(subscription);
       }
 
-      auto next = CreateMiddleware(++first, last, subscription);
       auto actual = *first;
+      auto next = CreateMiddleware(++first, last, subscription);
       actual->Next(next);
       return actual;
+   }
+
+   void SimpleChannel::AddMiddleware(std::function<void(std::shared_ptr<Middleware>, std::shared_ptr<Message>)> middleware) {
+      std::shared_ptr<Middleware> mid = std::make_shared<FunctorMiddleware>(middleware);
+      this->middlewares.push_back(mid);
    }
 
 }  // namespace ui

@@ -10,21 +10,18 @@
 #include <ui/command/message.h>
 #include <ui/command/middleware.h>
 
-#include "command.h"
-
 namespace ui {
 
-   class LambdaMiddleware : public CommandMiddleware {
+   class LambdaMiddleware : public Middleware {
      private:
-      std::shared_ptr<CommandMiddleware> next;
       MiddlewareAction action;
 
      public:
       LambdaMiddleware();
       explicit LambdaMiddleware(MiddlewareAction action);
-      void Next(std::shared_ptr<CommandMiddleware> middleware) override;
-      void Invoke(std::unique_ptr<Message> message) override;
-      std::unique_ptr<Message> Execute(std::unique_ptr<Message> message);
+      void Next(std::shared_ptr<Middleware> middleware) override;
+      void Invoke(std::shared_ptr<Message> message) override;
+      std::shared_ptr<Message> Execute(std::shared_ptr<Message> message);
    };
 
 }  // namespace ui

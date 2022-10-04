@@ -51,20 +51,16 @@ set(MY_LIBRARY_SOURCES
         src/command/simple_channel.h
         src/command/simple_channel.cpp
         #Middlewares
-        src/command/middleware/command.h
-        src/command/middleware/lambda.h
-        src/command/middleware/lambda.cpp
         src/command/middleware/default.h
         src/command/middleware/default.cpp
         src/command/middleware/empty.h
         src/command/middleware/empty.cpp
+        src/command/middleware/lambda.h
+        src/command/middleware/lambda.cpp
+        src/command/middleware/functor.h
+        src/command/middleware/functor.cpp
         src/command/message/event.h
         src/command/message/event.cpp
-        )
-
-
-SET(TEST_SRC
-        test/command_test.cpp
         )
 
 
@@ -85,14 +81,6 @@ target_link_libraries(ui PRIVATE freetype)
 if (APPLE)
     target_link_libraries(ui PRIVATE "-framework OpenGL")
 endif ()
-
-
-enable_testing()
-
-add_executable(ui_test ${TEST_SRC})
-
-target_link_libraries(ui_test PRIVATE GTest::gmock GTest::gtest GTest::gmock_main GTest::gtest_main)
-target_link_libraries(ui_test PRIVATE ui)
 
 
 source_group(

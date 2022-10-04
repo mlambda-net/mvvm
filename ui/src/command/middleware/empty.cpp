@@ -6,15 +6,15 @@
 
 namespace ui {
 
-   std::shared_ptr<CommandMiddleware> EmptyMiddleware::instance = nullptr;
+   std::shared_ptr<Middleware> EmptyMiddleware::instance = nullptr;
 
-   void EmptyMiddleware::Invoke(std::unique_ptr<Message> message) {
+   void EmptyMiddleware::Invoke(std::shared_ptr<Message> message) {
       // THis shouldn't be called anything
    }
 
    EmptyMiddleware::EmptyMiddleware() = default;
 
-   std::shared_ptr<CommandMiddleware> EmptyMiddleware::Instance() {
+   std::shared_ptr<Middleware> EmptyMiddleware::Instance() {
       if (instance == nullptr) {
          EmptyMiddleware empty;
          instance = std::make_shared<EmptyMiddleware>(empty);
@@ -22,7 +22,7 @@ namespace ui {
       return instance;
    }
 
-   void EmptyMiddleware::Next(std::shared_ptr<CommandMiddleware> middleware) {
-      // THis shouldn't be called anything
+   void EmptyMiddleware::Next(std::shared_ptr<Middleware> middleware) {
+      // THis shouldn't be called Middleware
    }
 }  // namespace ui

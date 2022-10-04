@@ -1,6 +1,3 @@
-//
-// Created by Roy Gonzalez on 24/9/22.
-//
 
 #include <ui/command/message.h>
 

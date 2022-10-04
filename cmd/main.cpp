@@ -1,22 +1,21 @@
-
-#include <iostream>
 #include <app/myapp.h>
 
+#include <iostream>
 
 int main() {
+   try {
 
 
-    try {
 
-        auto app = new MyApp("My App");
-        app->ConfigureDesktop();
-        app->Start();
-        auto done = false;
-        while (!done) {
-            done = app->Run();
-        }
-    } catch (std::exception e) {
-        std::cout << e.what() << std::endl;
-    }
-    return 0;
+      auto app = new MyApp("My App");
+      app->ConfigureDesktop();
+      app->Start();
+      auto done = false;
+      while (!done) {
+         done = app->Run();
+      }
+   } catch (std::exception e) {
+      std::cout << e.what() << std::endl;
+   }
+   return 0;
 }

@@ -12,7 +12,7 @@ namespace ui {
 
    class CommandEngine {
      private:
-      std::map<std::shared_ptr<Channel>, std::list<Subscription>> subscriptions;
+      std::map<std::shared_ptr<Channel>, std::shared_ptr<std::list<Subscription>>> subscriptions;
 
      public:
       CommandEngine();

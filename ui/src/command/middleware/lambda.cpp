@@ -11,7 +11,7 @@
 namespace ui {
 
    LambdaMiddleware::LambdaMiddleware()
-       : LambdaMiddleware([](std::unique_ptr<Message>) {
+       : LambdaMiddleware([](std::shared_ptr<Message>) {
             // this is an empty behavior
          }){};
 
@@ -20,16 +20,16 @@ namespace ui {
       this->action = std::move(action);
    }
 
-   void LambdaMiddleware::Invoke(std::unique_ptr<Message> message) {
-      this->next->Invoke(this->Execute(std::move(message)));
+   void LambdaMiddleware::Invoke(std::shared_ptr<Message> message) {
+      this->next->Invoke(this->Execute(message));
    }
 
-   void LambdaMiddleware::Next(std::shared_ptr<CommandMiddleware> middleware) {
+   void LambdaMiddleware::Next(std::shared_ptr<Middleware> middleware) {
       this->next = middleware;
    }
 
-   std::unique_ptr<Message> LambdaMiddleware::Execute(std::unique_ptr<Message> message) {
-      this->action(std::move(message));
+   std::shared_ptr<Message> LambdaMiddleware::Execute(std::shared_ptr<Message> message) {
+      this->action(message);
       return message;
    }
 }  // namespace ui
